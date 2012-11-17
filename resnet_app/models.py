@@ -11,6 +11,7 @@ class Device(models.Model):
 
 class Report(models.Model):
 	owner = models.ForeignKey(User, db_index=True)
+	device = models.ForeignKey('Device', db_index=True)
 	problem = models.CharField(max_length=100)
 	description = models.TextField()
 	progress = models.CharField(max_length=15)
