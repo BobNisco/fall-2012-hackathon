@@ -24,3 +24,6 @@ body {
 	margin-bottom: 0;
 	color: #777;
 }
+.tablesorter th {
+	cursor: pointer;
+}
