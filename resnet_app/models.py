@@ -2,14 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Devices(models.Model):
+class Device(models.Model):
 	owner = models.ForeignKey(User, db_index=True)
 	type = models.CharField(max_length=20)
 	password = models.CharField(max_length=100)
 	username = models.CharField(max_length=100)
 	serial = models.CharField(max_length=100)
 
-class Reports(models.Model):
+class Report(models.Model):
 	owner = models.ForeignKey(User, db_index=True)
 	problem = models.CharField(max_length=100)
 	description = models.TextField()
@@ -17,16 +17,16 @@ class Reports(models.Model):
 	completed = models.BooleanField()
 
 class Report_Tech(models.Model):
-	report = models.ForeignKey('Reports', db_index=True)
+	report = models.ForeignKey('Report', db_index=True)
 	tech = models.ForeignKey(User, db_index=True)
 
-class Statuses(models.Model):
+class Status(models.Model):
 	tech = models.ForeignKey(User, db_index=True)
-	report_id = models.ForeignKey('Reports', db_index=True)
+	report_id = models.ForeignKey('Report', db_index=True)
 	message = models.TextField()
 
-class Notifications(models.Model):
+class Notification(models.Model):
 	tech = models.ForeignKey(User, db_index=True)
-	report_id = models.ForeignKey('Reports', db_index=True)
+	report_id = models.ForeignKey('Report', db_index=True)
 	type = models.CharField(max_length=20)
 	notes = models.TextField()

@@ -3,5 +3,8 @@
 {% block content %}
 
     <p>This is a profile page</p>
+    {% for report in reports %}
+    <p>{% report %}</p>
+    {% endfor %}
 
 {% endblock %}

@@ -1,5 +1,5 @@
 # Create your views here.
-from models import Devices, Reports, Report_Tech, Statuses, Notifications
+from models import Device, Report, Report_Tech, Status, Notification
 from django.contrib import auth
 from django.conf import settings
 from django.template import RequestContext
@@ -33,4 +33,7 @@ def profile(request):
 
 @login_required
 def check_status(request):
-	return render_to_response('profile.html')
+	reports = Reports.objects.get(owner=User)
+	return render_to_response('profile.html', {
+		'reports' : reports,
+	})
