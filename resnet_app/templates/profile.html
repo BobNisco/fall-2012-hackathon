@@ -2,9 +2,28 @@
 
 {% block content %}
 
-    <p>This is a profile page</p>
+    <h1>Welcome <small>{{ user.first_name }} {{ user.last_name }}</small></h1>
+    {% if reports %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Problem</th>
+                <th>Device</th>
+                <th>Brought In</th>
+                <th>Progress</th>
+            </tr>
+        </thead>
+        <tbody>
     {% for report in reports %}
-    <p>{% report %}</p>
+            <tr>
+                <td>{{ report.problem }}</td>
+                <td>{{ report.device.type }}</td>
+                <td>{{ report.createdAt }}</td>
+                <td>{{ report.progress }}</td>
+            </tr>
     {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
 
 {% endblock %}
