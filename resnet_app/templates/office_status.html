@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>Current Office Status</h1>
+	</div>
+	<div>
+		<p>There are currently <strong>{{ reports_length }}</strong> open reports being worked on by our technicians. Now is a {% if reports_length < 10 %}<span class="label label-success">great</span>{% elif reports_length > 10 and reports_length < 20 %}<span class="label label-warning">good</span>{% else %}<span class="label label-important">decent</span>{% endif %} time to bring in your device for a speedy repair.</p>
+	</div>
+	<div class="row">
+		<div class="span4">
+			{% if now_day == 'Saturday' or now_day == 'Sunday' %}
+			<p>Sorry, we are currently <span class="label label-important">closed</span>.</p>
+			{% elif now.hour > 10 and now.hour < 19 and now_day != 'Friday' %}
+			<p>We are currently <span class="label label-success">open</span>.</p>
+			{% elif now.hour > 10 and now.hour < 17 and now_day == 'Friday' %}
+			<p>We are currently <span class="label label-success">open</span>.</p>
+			{% endif %}
+			<legend>Hours of Operation</legend>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Day</th>
+						<th>Open</th>
+						<th>Close</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Monday</td>
+						<td>10:00am</td>
+						<td>7:00pm</td>
+					</tr>
+					<tr>
+						<td>Tuesday</td>
+						<td>10:00am</td>
+						<td>7:00pm</td>
+					</tr>
+					<tr>
+						<td>Wednesday</td>
+						<td>10:00am</td>
+						<td>7:00pm</td>
+					</tr>
+					<tr>
+						<td>Thursday</td>
+						<td>10:00am</td>
+						<td>7:00pm</td>
+					</tr>
+					<tr>
+						<td>Friday</td>
+						<td>10:00am</td>
+						<td>5:00pm</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}

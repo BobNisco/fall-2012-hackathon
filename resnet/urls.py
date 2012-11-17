@@ -19,4 +19,5 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$',  login),
     url(r'^accounts/logout/$', logout),
     url(r'^accounts/profile/$', 'resnet_app.views.profile'),
+    url(r'^office/status/', 'resnet_app.views.office_status'),
 )

@@ -1,4 +1,5 @@
 # Create your views here.
+import datetime
 from models import Device, Report, Report_Tech, Status, Notification
 from django.contrib import auth
 from django.conf import settings
@@ -39,4 +40,19 @@ def profile(request):
 		'user' : user,
 		'reports' : reports,
 		'active':'status',
+	})
+
+def office_status(request):
+	user = request.user
+	reports = Report.objects.filter(completed=False)
+	reports_length = len(reports)
+	now = datetime.datetime.now()
+	now_day = now.strftime("%A")
+	return render_to_response('office_status.html', {
+		'user' : user,
+		'reports' : reports,
+		'reports_length' : reports_length,
+		'now' : now,
+		'now_day' : now_day,
+		'active':'office',
 	})

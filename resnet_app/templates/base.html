@@ -27,6 +27,7 @@
 								<li {% if active == 'index' %} class="active" {% endif %}><a href="/">Home</a></li>
 								<li {% if active == 'about' %} class="active" {% endif %}><a href="/about">About</a></li>
 								<li {% if active == 'status' %} class="active" {% endif %}><a href="/accounts/profile">Check Status</a></li>
+								<li {% if active == 'office' %} class="active" {% endif %}><a href="/office/status">Office Status</a></li>
 							</ul>
 							<div class="pull-right">
 							{% if user.is_authenticated %}
