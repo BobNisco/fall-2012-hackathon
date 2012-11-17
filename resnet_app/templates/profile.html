@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    <h1>Welcome <small>{{ user.first_name }} {{ user.last_name }}</small></h1>
+    
+    <div class="page-header">
+        <h1>Welcome <small>{{ user.first_name }} {{ user.last_name }}</small></h1>
+    </div>
     {% if reports %}
     <table class="table table-striped">
         <thead>
@@ -24,6 +26,7 @@
     {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <p>You don't have any reports, congrats on staying safe!</p>
     {% endif %}
-    
 {% endblock %}
