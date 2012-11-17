@@ -1,3 +1,26 @@
+html,
+body {
+	height: 100%;
+}
 .wrapper {
 	margin-top: 45px;
+}
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -66px;
+}
+#push,
+.footer {
+	height: 60px;
+}
+.footer {
+	padding-top: 5px;
+	border-top: 1px solid #e5e5e5;
+	background-color: #f5f5f5;
+}
+.footer p {
+	margin-bottom: 0;
+	color: #777;
 }
