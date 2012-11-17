@@ -1,5 +1,5 @@
 # Create your views here.
-from models import Users, Devices, Reports, Report_Tech, Statuses, Notifications
+from models import Devices, Reports, Report_Tech, Statuses, Notifications
 from django.contrib import auth
 from django.conf import settings
 from django.template import RequestContext
