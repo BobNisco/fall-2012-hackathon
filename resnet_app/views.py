@@ -14,8 +14,8 @@ def index(request):
 	})
 
 def login_view(request):
-	username = request.POST.get('username', '')
-	password = request.POST.get('password', '')
+	username = request.POST.post('username', '')
+	password = request.POST.post('password', '')
 	user = auth.authenticate(username=username, password=password)
 	if user is not None and user.is_active:
 		# Correct password, and the user is marked "active"
