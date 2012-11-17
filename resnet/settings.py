@@ -1,3 +1,5 @@
+import os
+import socket
 # Django settings for resnet project.
 
 DEBUG = True
