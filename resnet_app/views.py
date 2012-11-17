@@ -44,7 +44,7 @@ def profile(request):
 
 def office_status(request):
 	user = request.user
-	reports = Report.objects.filter(completed=False)
+	reports = Report.objects.filter(completed=False).order_by('-createdAt')
 	reports_length = len(reports)
 	now = datetime.datetime.now()
 	now_day = now.strftime("%A")
