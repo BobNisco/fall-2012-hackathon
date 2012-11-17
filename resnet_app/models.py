@@ -14,7 +14,6 @@ class Report(models.Model):
 	device = models.ForeignKey('Device', db_index=True)
 	problem = models.CharField(max_length=100)
 	description = models.TextField()
-	progress = models.CharField(max_length=15)
 	completed = models.BooleanField()
 	createdAt = models.DateTimeField(auto_now=True)
 	updatedAt = models.DateTimeField(auto_now=True)

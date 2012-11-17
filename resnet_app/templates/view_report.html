@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Report status : {{latest.message}}</h1>
+    {% if report %}
+    <div class="row">
+    	<div class="span9">
+    		<div class="progress progress-striped active">
+    		{% if latest.message = "Checked In" %}
+	  			<div class="bar bar-danger" style="width: 10%;"></div>
+	  		{% elif latest.message = "In Progress" %}
+	  			<div class="bar bar-warning" style="width: 50%;"></div>
+	  		{% elif latest.message = "Fixed" %}
+	  			<div class="bar bar-info" style="width: 80%;"></div>
+	  		{% elif latest.message = "User Notified" %}
+	  			<div class="bar bar-info" style="width: 90%;"></div>
+	  		{% elif latest.message = "User Picked Up" %}
+	  			<div class="bar bar-success" style="width: 100%;"></div>
+	  		{% endif %}
+	  		</div>
+	  		<p>
+	  		Last updated {{latest.createdAt}}
+			</p>	
+    		<table class="table table-striped">
+		        <tbody>
+		            <tr>
+		                <td>Device </td>
+		                <td>{{ report.device.type }}</td>
+		            </tr>
+		            <tr>
+		                <td>Date Opened</td>
+		                <td>{{ report.createdAt }}</td>
+		            </tr>
+		            <tr>
+		                <td>Problem</td>
+		                <td>{{ report.problem }}</td>
+		            </tr>
+		            <tr>
+		                <td>Problem Description</td>
+		                <td>{{ report.description }}</td>
+		            </tr>
+		        </tbody>
+		    </table>
+    	</div>
+    </div>
+    {% endif %}
+    
+{% endblock %}

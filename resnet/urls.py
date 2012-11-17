@@ -18,5 +18,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$',  login),
     url(r'^accounts/logout/$', logout),
-    url(r'^accounts/profile/$', 'resnet_app.views.profile'),
+    url(r'^reports/$', 'resnet_app.views.profile'),
+    url(r'^reports/(?P<reportID>[^\.]+)', 
+               'resnet_app.views.view_report')
 )

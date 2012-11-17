@@ -31,15 +31,22 @@ def logout_view(request):
 def profile(request):
 	user = request.user
 	reports = Report.objects.filter(owner=user)
+	latest = []
+	for report in reports:
+		latest.append(Status.objects.filter(report_id=report).order_by('-createdAt')[0])
 	return render_to_response('profile.html', {
 		'user' : user,
 		'reports' : reports,
 		'active':'status',
+		'latest':latest
 	})
 
 @login_required
-def check_status(request):
-	reports = Report.objects.all()
-	return render_to_response('profile.html', {
-		'reports' : reports,
-	})
+def view_report(request, reportID):
+	report = get_object_or_404(Report, id=reportID)	
+	user = request.user
+	latest = Status.objects.filter(report_id=reportID).order_by('-createdAt')[0]
+	if report:
+		if report.owner.id == user.id:
+			return render_to_response('view_report.html', {'user' : user,'report' : report, 'latest' : latest})
+	return render_to_response('error.html') 
