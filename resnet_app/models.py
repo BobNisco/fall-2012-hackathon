@@ -5,9 +5,9 @@ from django.contrib.auth.models import User
 class Device(models.Model):
 	owner = models.ForeignKey(User, db_index=True)
 	type = models.CharField(max_length=20, db_index=True)
-	password = models.CharField(max_length=100)
-	username = models.CharField(max_length=100)
-	serial = models.CharField(max_length=100)
+	password = models.CharField(max_length=100, null=True)
+	username = models.CharField(max_length=100, null=True)
+	serial = models.CharField(max_length=100, null=True)
 
 class Report(models.Model):
 	owner = models.ForeignKey(User, db_index=True)

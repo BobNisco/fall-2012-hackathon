@@ -7,7 +7,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
 
 def index(request):
-		return render_to_response('index.html', {'active':'index'})
+	user = request.user
+	return render_to_response('index.html', {
+		'user' : user,
+		'active':'index',
+	})
 
 def login_view(request):
 	username = request.POST.get('username', '')
@@ -35,11 +39,4 @@ def profile(request):
 		'user' : user,
 		'reports' : reports,
 		'active':'status',
-	})
-
-@login_required
-def check_status(request):
-	reports = Report.objects.all()
-	return render_to_response('profile.html', {
-		'reports' : reports,
 	})
