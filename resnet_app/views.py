@@ -30,3 +30,7 @@ def logout_view(request):
 @login_required
 def profile(request):
     return render_to_response('profile.html')
+
+@login_required
+def check_status(request):
+	return render_to_response('profile.html')
