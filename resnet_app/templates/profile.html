@@ -12,16 +12,20 @@
                 <th>Problem</th>
                 <th>Device</th>
                 <th>Brought In</th>
-                <th>Progress</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
     {% for report in reports %}
             <tr>
-                <td>{{ report.problem }}</td>
+                <td><a href="{{report.id}}">{{ report.problem }}</a></td>
                 <td>{{ report.device.type }}</td>
                 <td>{{ report.createdAt }}</td>
-                <td>{{ report.progress }}</td>
+                {% for status  in latest %}
+                {%if status.report_id = report %}
+                <td>{{status.message}}</td>
+                {% endif %}
+                {% endfor %}
             </tr>
     {% endfor %}
         </tbody>
