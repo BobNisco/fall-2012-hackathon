@@ -9,8 +9,16 @@ from django.shortcuts import render_to_response, get_object_or_404
 
 def index(request):
 	user = request.user
+	reports = Report.objects.filter(completed=False).order_by('-createdAt')
+	reports_length = len(reports)
+	now = datetime.datetime.now()
+	now_day = now.strftime("%A")
 	return render_to_response('index.html', {
 		'user' : user,
+		'reports' : reports,
+		'reports_length' : reports_length,
+		'now' : now,
+		'now_day' : now_day,
 		'active':'index',
 	})
 
