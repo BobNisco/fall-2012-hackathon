@@ -5,6 +5,7 @@
     <div class="page-header">
         <h1>Welcome <small>{% if user.first_name or user.last_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</small></h1>
     </div>
+    <h3>Your Reports</h3>
     {% if reports %}
     <table class="table table-striped tablesorter">
         <thead>
@@ -19,7 +20,7 @@
         {% for report in reports %}
             <tr>
                 <td><a href="{{report.id}}">{{ report.problem }}</a></td>
-                <td>{{ report.device.get_type_display }}</td>
+                <td>{{ report.device }}</td>
                 <td>{{ report.createdAt }}</td>
                 <td>{% if report.completed %}Completed{% else %}<a href="{{report.id}}">Check Status</a>{% endif %}</td>
             </tr>
@@ -28,5 +29,32 @@
     </table>
     {% else %}
     <p>You don't have any reports, congrats on staying safe!</p>
+    {% endif %}
+    <h3>Your Devices</h3>
+    {% if devices %}
+    <table class="table table-striped tablesorter">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Type</th>
+                <th>OS</th>
+                <th>Serial</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for device in devices %}
+            <tr data-id="{{ device.id }}">
+                <td>{{ device }}</td>
+                <td>{{ device.get_type_display }}</td>
+                <td>{{ device.get_os_display }}</td>
+                <td>{{ device.serial }}</td>
+                <td><a href="#" class="device_reports_link">View Associated Reports</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>You don't have any devices listed in our database. That's probably a good thing!</p>
     {% endif %}
 {% endblock %}

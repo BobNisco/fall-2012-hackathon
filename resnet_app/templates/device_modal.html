@@ -1,0 +1,30 @@
+<div class="modal hide fade" id="device_modal_{{ device.id }}">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Device Details <small>{{ device }}</small></h3>
+	</div>
+	<div class="modal-body">
+		{% if reports %}
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Problem</th>
+					<th>Brought In</th>
+					<th>Completed?</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for report in reports %}
+				<tr>
+					<td><a href="/reports/{{ report.id }}">{{ report.problem }}</a></td>
+					<td>{{ report.createdAt }}</td>
+					<td>{{ report.completed }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{% else %}
+		<p>There are no associated reports with this device. Nice!</p>
+		{% endif %}
+	</div>
+</div>

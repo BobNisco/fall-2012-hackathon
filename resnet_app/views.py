@@ -3,6 +3,7 @@ import datetime
 from models import Device, Report, Report_Tech, Status, Notification
 from django.contrib import auth
 from django.conf import settings
+from django.utils import simplejson
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, get_object_or_404
@@ -44,6 +45,7 @@ def logout_view(request):
 def profile(request):
 	user = request.user
 	reports = Report.objects.filter(owner=user).order_by('-createdAt')
+	devices = Device.objects.filter(owner=user)
 	statuses = {}
 	for report in reports:
 		statuses[report.id] = Status.objects.filter(report=report).order_by('-createdAt')
@@ -54,6 +56,7 @@ def profile(request):
 	return render_to_response('profile.html', {
 		'user' : user,
 		'reports' : reports,
+		'devices' : devices,
 		'active' : 'status',
 		'statuses' : statuses,
 		'latest_statuses' : latest_statuses,
@@ -111,3 +114,16 @@ def cpanel(request):
 def cpanel_open(request):
 	user = request.user
 	return render_to_response('cpanel/open.html', {'user' : user})
+
+def find_device(request):
+	if request.is_ajax():
+		id = request.POST['id']
+		device = Device.objects.get(id=id)
+		reports = Report.objects.filter(device=device)
+		if device:
+			return render_to_response('device_modal.html', {
+				'device' : device,
+				'reports' : reports,
+			})
+	else:
+		return 'error'

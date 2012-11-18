@@ -18,9 +18,10 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^cpanel/$', 'resnet_app.views.cpanel'),
     url(r'^cpanel/open', 'resnet_app.views.cpanel_open'),
-    url(r'^accounts/login/$',  login),
+    url(r'^accounts/login/$', login),
     url(r'^accounts/logout/$', logout),
     url(r'^reports/$', 'resnet_app.views.profile'),
     url(r'^reports/(?P<reportID>[^\.]+)', 
-               'resnet_app.views.view_report')
+               'resnet_app.views.view_report'),
+    url(r'^devices/find/', 'resnet_app.views.find_device'),
 )
