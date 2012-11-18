@@ -16,7 +16,7 @@
 			<tbody>
 				{% for report in reports %}
 				<tr>
-					<td><a href="/reports/{{ report.id }}">{{ report.problem }}</a></td>
+					<td><a href="/reports/{{ report.id }}">{{ report.get_problem_display }}</a></td>
 					<td>{{ report.createdAt }}</td>
 					<td>{{ report.completed }}</td>
 				</tr>
