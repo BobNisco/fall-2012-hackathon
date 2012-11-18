@@ -18,7 +18,7 @@
 	<tbody>
 		{% for entry in found_entries %}
 		<tr>
-			<td><a href="/reports/{{ entry.id }}">{{ entry.problem }}</a></td>
+			<td><a href="/reports/{{ entry.id }}">{{ entry.get_problem_display }}</a></td>
 			<td>{{ entry.owner }}</td>
 			<td>{{ entry.createdAt }}</td>
 			<td>{{ entry.completed }}</td>
