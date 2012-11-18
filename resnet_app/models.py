@@ -74,7 +74,10 @@ class Status(models.Model):
 	createdAt = models.DateTimeField(auto_now=True)
 
 	def __unicode__(self):
-		return '%s\'s %s - %s - %s' %(self.report.owner.username, self.report.device.get_type_display(), self.report.problem, self.get_message_display())	
+		return '%s\'s %s - %s - %s' %(self.report.owner.username, self.report.device.get_type_display(), self.report.problem, self.get_message_display())
+
+	def get_message_choices(self):
+		return self.MESSAGE_CHOICES
 
 class Notification(models.Model):
 	NOTIFICATION_TYPES = (

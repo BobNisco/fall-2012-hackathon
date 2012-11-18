@@ -1,0 +1,52 @@
+{% extends "cpanel/cpanelbase.html" %}
+
+{% block content %}
+<div class="page-header">
+	<h1>Add Status <small>For {{ report }}</small></h1>
+</div>
+<form action="/cpanel/save_status/" method="post">
+	<fieldset>
+		<div class="control-group">
+			<label class="control-label" for="message">Type</label>
+			<div class="controls">
+				<select id="message" name="message">
+					{% for choice in message_choices %}
+					<option value="{{ choice.0 }}">{{ choice.1 }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="note">Note</label>
+			<div class="controls">
+				<textarea id="note" name="note" class="span4" rows="3"></textarea>
+			</div>
+		</div>
+		<input type="hidden" name="id" value="{{ report.id }}" />
+		{% csrf_token %}
+		<input type="submit" class="btn btn-primary" value="Add Status" />
+	</fieldset>
+</form>
+
+<h3>Previous statuses</h3>
+<table class="table table-striped tablesorter">
+	<thead>
+		<tr>
+			<th>Message</th>
+			<th>Details</th>
+			<th>When</th>
+			<th>Tech</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for status in statuses %}
+		<tr>
+			<td>{{ status.get_message_display }}</td>
+			<td>{{ status.note }}</td>
+			<td>{{ status.createdAt }}</td>
+			<td>{{ status.tech.username }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}

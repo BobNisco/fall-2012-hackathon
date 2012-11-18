@@ -101,7 +101,7 @@ def view_report(request, reportID):
 				'statuses' : statuses,
 				'latest' : latest,
 				'active' : 'status',
-			})
+			}, context_instance=RequestContext(request))
 		else:
 			redirect_to_report
 	else:
@@ -220,6 +220,7 @@ def find_device(request):
 
 @staff_member_required
 def search(request):
+	user = request.user
 	query_string = ''
 	found_entries = None
 	if request.POST['q'].strip():
@@ -227,10 +228,45 @@ def search(request):
 		entry_query = get_query(query_string, ['problem', 'description', 'owner__username', 'owner__email', 'owner__first_name', 'owner__last_name'])
 		found_entries = Report.objects.filter(entry_query)
 
-	return render_to_response('search_results.html',{
+	return render_to_response('search_results.html', {
 		'query_string': query_string,
-		'found_entries': found_entries
+		'found_entries': found_entries,
+		'user' : user,
 	}, context_instance=RequestContext(request))
+
+@staff_member_required
+def add_status(request):
+	id = request.POST['id']
+	user = request.user
+	report = Report.objects.get(id=id)
+	statuses = Status.objects.filter(report=report).order_by('-createdAt')
+	message_choices = Status.get_message_choices(Status())
+	return render_to_response('cpanel/add_status.html', {
+		'report' : report,
+		'statuses' : statuses,
+		'message_choices' : message_choices,
+		'user' : user,
+	}, context_instance=RequestContext(request))
+
+def save_status(request):
+	id = request.POST['id']
+	report = Report.objects.get(id=id)
+	message = request.POST['message']
+	note = request.POST['note']
+	user = request.user
+	new_status = Status()
+	new_status.tech = user
+	new_status.report = report
+	new_status.message = message
+	new_status.note = note
+	new_status.save()
+
+	if message == 'p':
+		report.completed = True
+		report.save()
+
+	return HttpResponseRedirect('/reports/' + id)
+
 
 def redirect_to_report(request):
 	return HttpResponseRedirect('reports/')
