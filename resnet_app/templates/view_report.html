@@ -46,7 +46,7 @@
 		        </tbody>
 		    </table>
 
-		    <legend>Status Updates</legend>
+		    <legend>Status Updates {% if user.is_staff %}<form action="/cpanel/add_status/" method="post"> {% csrf_token %}<input type="hidden" name="id" value="{{ report.id }}" /><input type="submit" class="btn btn-primary pull-right" value="Add Status Update" /></form>{% endif %}</legend>
 		    <table class="table table-striped tablesorter">
 		    	<thead>
 		    		<tr>

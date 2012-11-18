@@ -28,4 +28,6 @@ urlpatterns = patterns('',
                'resnet_app.views.view_report'),
     url(r'^devices/find/', 'resnet_app.views.find_device'),
     url(r'^search/', 'resnet_app.views.search'),
+    url(r'^cpanel/add_status/', 'resnet_app.views.add_status'),
+    url(r'^cpanel/save_status/', 'resnet_app.views.save_status'),
 )
