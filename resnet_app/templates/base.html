@@ -26,7 +26,9 @@
 							<ul class="nav">
 								<li {% if active == 'index' %} class="active" {% endif %}><a href="/">Home</a></li>
 								<li {% if active == 'status' %} class="active" {% endif %}><a href="/reports">Check Status</a></li>
-								<li {% if active == 'about' %} class="active" {% endif %}><a href="/about">About</a></li>
+								{% if user.is_staff %}
+								<li><a href="/cpanel">Cpanel</a></li>
+								{% endif %}
 							</ul>
 							<div class="pull-right">
 							{% if user.is_authenticated %}

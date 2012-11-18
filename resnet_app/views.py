@@ -110,7 +110,13 @@ def cpanel(request):
 	open = len(reports.filter(completed = False))
 	closed = len(reports.filter(completed = True))
 	numReports = len(reports)
-	return render_to_response('cpanel/cpanel.html', {'numReports' : numReports, 'user' : user, 'open' : open, 'closed' : closed})
+	return render_to_response('cpanel/cpanel.html', {
+		'numReports' : numReports,
+		'user' : user,
+		'open' : open,
+		'closed' : closed,
+		'active' : 'index',
+	})
 
 @staff_member_required
 def cpanel_open(request):
