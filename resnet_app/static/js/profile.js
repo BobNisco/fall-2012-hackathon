@@ -61,5 +61,16 @@ $(document).ready(function() {
 				}
 			});
 		}
-	}); 
+	});
+
+	var view_report = $('.view_report'),
+		isReport = (view_report.length) ? true : false;
+
+	if (isReport) {
+		setInterval( function() {
+			$.post('/reports/' + view_report.data('id'), {'csrftoken' : csrftoken}, function(response) {
+				$('#content').replaceWith($(response).find('#content'));
+			});
+		}, 10000 );
+	}
 }); 
