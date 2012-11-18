@@ -68,5 +68,11 @@ def view_report(request, reportID):
 	latest = Status.objects.filter(report_id=reportID).order_by('-createdAt')[0]
 	if report:
 		if report.owner.id == user.id:
-			return render_to_response('view_report.html', {'user' : user,'report' : report, 'latest' : latest})
-	return render_to_response('error.html') 
+			return render_to_response('view_report.html', {
+				'user' : user,
+				'report' : report,
+				'latest' : latest,
+				'active' : 'status',
+			})
+	else:
+		return render_to_response('error.html') 
