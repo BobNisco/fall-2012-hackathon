@@ -19,7 +19,7 @@ def index(request):
 		'reports_length' : reports_length,
 		'now' : now,
 		'now_day' : now_day,
-		'active':'index',
+		'active':'index', 
 	})
 
 def login_view(request):
@@ -38,7 +38,7 @@ def login_view(request):
 def logout_view(request):
 	auth.logout(request)
 	# Redirect to a success page.
-	return render_to_response("/account/loggedout/")
+	return render_to_response("/reports/")
 
 @login_required
 def profile(request):
@@ -97,3 +97,17 @@ def view_report(request, reportID):
 			})
 	else:
 		return render_to_response('error.html') 
+
+@login_required
+def cpanel(request):
+	user = request.user
+	reports = Report.objects.all()
+	open = len(reports.filter(completed = False))
+	closed = len(reports.filter(completed = True))
+	numReports = len(reports)
+	return render_to_response('cpanel/cpanel.html', {'numReports' : numReports, 'user' : user, 'open' : open, 'closed' : closed})
+
+@login_required
+def cpanel_open(request):
+	user = request.user
+	return render_to_response('cpanel/open.html', {'user' : user})
