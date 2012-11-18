@@ -7,6 +7,12 @@
 		<h1>Cpanel Home<h1>
 	</div>
 	
+	{% if success %}
+    <div class="alert alert-success">
+  		Report Added!
+	</div>
+	{% endif %}
+	
 	<div class="row">
 		<div class="span12">
 			<h2>{{open}} Open Reports</h2>
@@ -23,8 +29,8 @@
 				<tbody>
 					{% for report in open_reports %}
 					<tr>
-						<td><a href="/reports/{{report.id}}">{{ report.problem }}</a></td>
-						<td>{{ report.owner.first_name }} {{ report.owner.last_name }}</td>
+						<td><a href="/reports/{{report.id}}">{{ report.get_problem_display }}</a></td>
+						<td>{{ report.owner.username}}</td>
 						<td>{{ report.createdAt }}</td>
 						<td>{{ report.updatedAt }}</td>
 					</tr>
@@ -49,7 +55,7 @@
 					{% for report in closed_reports %}
 					<tr>
 						<td><a href="/reports/{{report.id}}">{{ report.problem }}</a></td>
-						<td>{{ report.owner.first_name }} {{ report.owner.last_name }}</td>
+						<td>{{ report.owner.username}}</td>
 						<td>{{ report.createdAt }}</td>
 						<td>{{ report.updatedAt }}</td>
 					</tr>
@@ -58,7 +64,7 @@
 			</table>
 			{% else %}
 			<p>No closed reports. Get to work!</p>
-			{% endif %}
+			{% endif %} 
 		</div>
 	</div>
 {% endblock %}

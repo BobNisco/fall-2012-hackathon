@@ -1,7 +1,8 @@
 # Create your views here.
 import datetime
+
 from resnet_search import normalize_query, get_query
-from models import Device, Report, Report_Tech, Status, Notification
+from models import User,Device, Report, Report_Tech, Status, Notification
 from django.contrib import auth
 from django.conf import settings
 from django.utils import simplejson
@@ -107,7 +108,7 @@ def view_report(request, reportID):
 		return redirect_to_report
 
 @staff_member_required
-def cpanel(request):
+def cpanel(request, success = False):
 	user = request.user
 	reports = Report.objects.all()
 	open_reports = reports.filter(completed = False)
@@ -129,7 +130,76 @@ def cpanel(request):
 @staff_member_required
 def cpanel_open(request):
 	user = request.user
-	return render_to_response('cpanel/open.html', {'user' : user})
+	device_choices = Device.get_device_choices(Device())
+	os_choices = Device.get_os_choices(Device())
+	problem_choices = Report.get_problem_choices(Report())
+	return render_to_response('cpanel/open.html', {
+			'user' : user, 
+			'device_choices' : device_choices, 
+			'os_choices' : os_choices, 
+			'problem_choices' : problem_choices
+			}, context_instance=RequestContext(request))
+
+@login_required
+def cpanel_submit(request):
+	# The user adding the request
+	user = request.user
+	
+	name = request.POST['name']
+	phone = request.POST['phone']
+	email = request.POST['email']
+	type = request.POST['device']
+	os = request.POST['os']
+	problem = request.POST['problem']
+	description = request.POST['description']
+	deviceObj = Device()
+	report = Report()
+	usersWithSameEmail = User.objects.filter(email=email)
+	reportUser = User()
+	
+	for u in usersWithSameEmail:
+		# If user exists, don't create a new one
+		if u.email == email:
+			reportUser = u
+		else:
+			reportUser.email = email
+			reportUser.username = username
+			u.save()
+			
+		# Get the devices the user has
+		usersDevices = Device.objects.filter(owner=reportUser)
+			
+		# Generate device object
+		deviceObj.owner = u
+		deviceObj.os = os
+		deviceObj.type = type
+		deviceObj.save()
+			
+		for d in usersDevices:
+			# If the device exists recognize it, and use it
+			if d.os == os and d.type == type:
+				deviceObj = d
+			
+			
+		# Generate Report
+		report.owner = u
+		report.device = deviceObj
+		report.description = description			
+		report.problem = problem
+		report.completed = False
+		report.save()
+			
+		# Generate initial status
+		status = Status()
+		status.report = report
+		# Checked in message
+		status.message = 'c'
+		status.tech = user
+		status.save()
+			
+		return cpanel(request, True)
+	# Otherwise create a new one
+	return render_to_response('test.html', {'email' : email})
 
 @login_required
 def find_device(request):

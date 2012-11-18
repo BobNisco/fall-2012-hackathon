@@ -19,7 +19,7 @@
         <tbody>
         {% for report in reports %}
             <tr>
-                <td><a href="{{report.id}}">{{ report.problem }}</a></td>
+                <td><a href="{{report.id}}">{{ report.get_problem_display }}</a></td>
                 <td>{{ report.device }}</td>
                 <td>{{ report.createdAt }}</td>
                 <td>{% if report.completed %}Completed{% else %}<a href="{{report.id}}">Check Status</a>{% endif %}</td>

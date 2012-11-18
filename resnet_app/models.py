@@ -28,11 +28,22 @@ class Device(models.Model):
 	
 	def __unicode__(self):
 		return '%s\'s %s' %(self.owner.username, self.get_type_display())
+	
+	def get_os_choices(self):
+		return self.OS_CHOICES;
+	
+	def get_device_choices(self):
+		return self.DEVICE_CHOICES;
 
 class Report(models.Model):
+	PROBLEM_CHOICES = (
+		("hw", "Hardware Repair"),
+		("v", "Virus"),
+		("n", "Network"),
+	)
 	owner = models.ForeignKey(User, db_index=True)
 	device = models.ForeignKey('Device', db_index=True)
-	problem = models.CharField(max_length=100)
+	problem = models.CharField(max_length=100, choices=PROBLEM_CHOICES, db_index=True)
 	description = models.TextField()
 	completed = models.BooleanField()
 	createdAt = models.DateTimeField(auto_now=True)
@@ -40,6 +51,9 @@ class Report(models.Model):
 
 	def __unicode__(self):
 		return '%s\'s %s - %s' %(self.owner.username, self.device.get_type_display(), self.problem)
+	
+	def get_problem_choices(self):
+		return self.PROBLEM_CHOICES;
 
 class Report_Tech(models.Model):
 	report = models.ForeignKey('Report', db_index=True)
