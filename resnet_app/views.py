@@ -157,15 +157,19 @@ def cpanel_submit(request):
 	report = Report()
 	usersWithSameEmail = User.objects.filter(email=email)
 	reportUser = User()
-	
+
+	userFound = False
 	for u in usersWithSameEmail:
 		# If user exists, don't create a new one
 		if u.email == email:
 			reportUser = u
-		else:
-			reportUser.email = email
-			reportUser.username = username
-			u.save()
+			userFound = True
+			
+	if not userFound:
+		reportUser.email = email
+		reportUser.username = name
+		reportUser.password = 'password'
+		reportUser.save()
 			
 	# Get the devices the user has
 	usersDevices = Device.objects.filter(owner=reportUser)
@@ -179,13 +183,13 @@ def cpanel_submit(request):
 						
 	if not deviceFound:
 		# Generate device object
-		deviceObj.owner = u
+		deviceObj.owner = reportUser
 		deviceObj.os = os
 		deviceObj.type = type
 		deviceObj.save()
 			
 	# Generate Report
-	report.owner = u
+	report.owner = reportUser
 	report.device = deviceObj
 	report.description = description			
 	report.problem = problem
