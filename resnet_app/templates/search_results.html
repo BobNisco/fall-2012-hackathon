@@ -1,0 +1,33 @@
+{% extends "cpanel/cpanelbase.html" %}
+
+{% block content %}
+<div class="page-header">
+	<h1>Search Results <small>{{ query_string }}</small></h1>
+</div>
+<div>
+{% if found_entries %}
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Report</th>
+			<th>Owner</th>
+			<th>Created</th>
+			<th>Completed</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for entry in found_entries %}
+		<tr>
+			<td><a href="/reports/{{ entry.id }}">{{ entry.problem }}</a></td>
+			<td>{{ entry.owner }}</td>
+			<td>{{ entry.createdAt }}</td>
+			<td>{{ entry.completed }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% else %}
+<p>No results for query "{{ query_string }}"</p>
+{% endif %}
+</div>
+{% endblock %}

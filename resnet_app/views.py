@@ -1,5 +1,6 @@
 # Create your views here.
 import datetime
+from resnet_search import normalize_query, get_query
 from models import Device, Report, Report_Tech, Status, Notification
 from django.contrib import auth
 from django.conf import settings
@@ -92,7 +93,7 @@ def view_report(request, reportID):
 	if statuses:
 		latest = statuses[0]
 	if report:
-		if report.owner.id == user.id:
+		if (report.owner.id == user.id) or user.is_staff:
 			return render_to_response('view_report.html', {
 				'user' : user,
 				'report' : report,
@@ -100,6 +101,8 @@ def view_report(request, reportID):
 				'latest' : latest,
 				'active' : 'status',
 			})
+		else:
+			redirect_to_report
 	else:
 		return redirect_to_report
 
@@ -116,7 +119,7 @@ def cpanel(request):
 		'open' : open,
 		'closed' : closed,
 		'active' : 'index',
-	})
+	}, context_instance=RequestContext(request))
 
 @staff_member_required
 def cpanel_open(request):
@@ -139,6 +142,20 @@ def find_device(request):
 			redirect_to_report
 	else:
 		return 'error'
+
+@staff_member_required
+def search(request):
+	query_string = ''
+	found_entries = None
+	if request.POST['q'].strip():
+		query_string = request.POST['q']
+		entry_query = get_query(query_string, ['problem', 'description', 'owner__username', 'owner__email', 'owner__first_name', 'owner__last_name'])
+		found_entries = Report.objects.filter(entry_query)
+
+	return render_to_response('search_results.html',{
+		'query_string': query_string,
+		'found_entries': found_entries
+	})
 
 def redirect_to_report(request):
 	return HttpResponseRedirect('reports/')

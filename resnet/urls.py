@@ -26,4 +26,5 @@ urlpatterns = patterns('',
     url(r'^reports/(?P<reportID>[^\.]+)', 
                'resnet_app.views.view_report'),
     url(r'^devices/find/', 'resnet_app.views.find_device'),
+    url(r'^search/', 'resnet_app.views.search'),
 )
