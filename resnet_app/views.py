@@ -142,21 +142,29 @@ def cpanel_submit(request):
 	for u in usersWithSameEmail:
 		# If user exists, don't create a new one
 		if u.email == email:
-			deviceObj.owner = u
-			deviceObj.device = os
-			deviceObj.type = type
-			deviceObj.save()
+			# Get the devices the user has
+			usersDevices = Device.objects.filter(owner=u)
 			
+			for d in usersDevices:
+				# If the device exists recognize it
+				if d.os == os and d.type == type:
+					deviceObj = d
+				# Otherwise create a new device object
+				else: 
+					deviceObj.owner = u
+					deviceObj.os = os
+					deviceObj.type = type
+					deviceObj.save()
+			
+			# Generate Report
 			report.owner = u
 			report.device = deviceObj
-			report.description = description
+			report.description = description			
 			report.problem = problem
 			report.completed = False
 			report.save()
 			
-			reports = Report.objects.all()
 			return render_to_response('test.html', {
-				'reports' : reports,
 			})
 	# Otherwise create a new one
 	return render_to_response('test.html', {'email' : email})

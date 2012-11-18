@@ -43,7 +43,7 @@ class Report(models.Model):
 	)
 	owner = models.ForeignKey(User, db_index=True)
 	device = models.ForeignKey('Device', db_index=True)
-	problem = models.CharField(max_length=100)
+	problem = models.CharField(max_length=100, choices=PROBLEM_CHOICES, db_index=True)
 	description = models.TextField()
 	completed = models.BooleanField()
 	createdAt = models.DateTimeField(auto_now=True)
