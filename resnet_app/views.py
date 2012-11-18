@@ -102,7 +102,7 @@ def view_report(request, reportID):
 		return render_to_response('error.html') 
 
 @login_required
-def cpanel(request):
+def cpanel(request, success = False):
 	user = request.user
 	reports = Report.objects.all()
 	open = len(reports.filter(completed = False))
@@ -112,7 +112,8 @@ def cpanel(request):
 			'numReports' : numReports, 
 			'user' : user, 
 			'open' : open, 
-			'closed' : closed})
+			'closed' : closed,
+			'success' : success})
 
 @login_required
 def cpanel_open(request):
@@ -184,8 +185,7 @@ def cpanel_submit(request):
 		status.tech = user
 		status.save()
 			
-		return render_to_response('test.html', {'u' : u.username
-		})
+		return cpanel(request, True)
 	# Otherwise create a new one
 	return render_to_response('test.html', {'email' : email})
 

@@ -1,7 +1,11 @@
 {% extends "cpanel/cpanelbase.html" %}
 
 {% block content %}
-    
+    {% if success %}
+    <div class="alert alert-success">
+  		Report Added!
+	</div>
+	{% endif %}
     <div class="page-header">
     	<div class="row">
     		<div class="span4">
