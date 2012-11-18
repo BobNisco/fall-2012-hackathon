@@ -22,9 +22,15 @@
                 <td>{{ report.device.type }}</td>
                 <td>{{ report.createdAt }}</td>
                 {% for status  in latest %}
-                {%if status.report_id = report %}
-                <td>{{status.message}}</td>
-                {% endif %}
+                	{% if status.report_id = report %}
+                		{% if status.message = "Checked In" %}
+	                		<td><span class="label label-important">{{status.message}}</span></td>
+	                	{% elif status.message = "In Progress" %}
+	                		<td><span class="label label-warning">{{status.message}}</span></td>
+	                	{% else %}
+	                		<td><span class="label label-success">{{status.message}}</span></td>
+	                	{% endif %}
+	                {% endif %}
                 {% endfor %}
             </tr>
     {% endfor %}

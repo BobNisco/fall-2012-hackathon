@@ -16,6 +16,8 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^cpanel/$', 'resnet_app.views.cpanel'),
+    url(r'^cpanel/open', 'resnet_app.views.cpanel_open'),
     url(r'^accounts/login/$',  login),
     url(r'^accounts/logout/$', logout),
     url(r'^reports/$', 'resnet_app.views.profile'),

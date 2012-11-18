@@ -1,0 +1,39 @@
+{% extends "cpanel/cpanelbase.html" %}
+
+{% block content %}
+    
+    <div class="page-header">
+    	<div class="row">
+    		<div class="span4">
+       <div class="input-append">
+		  <input class="span2" id="appendedDropdownButton" type="text">
+		  <div class="btn-group">
+		    <button class="btn dropdown-toggle" data-toggle="dropdown">
+		      Search
+		      <span class="caret"></span>
+		    </button>
+		    <ul class="dropdown-menu">
+		      <li>
+		      	<a href="cpanel/search/">Name</a>
+		      </li>
+		      <li>
+		      	<a href="c">Device</a>
+		      </li>
+		      <li>
+		      	<a href="#">ID</a>
+		      </li>
+		    </ul>
+		  </div>
+		</div>
+		</div>
+		<div class="btn"><a href="open">Open a New Report</a></div>
+		</div>
+    </div>
+    
+    <div class="row">
+    	<div class="span9">
+    		<h2>{{open}} Open Reports</h2>
+    		<h2>{{closed}} Closed Reports</h2>
+    	</div>
+    </div>
+{% endblock %}
