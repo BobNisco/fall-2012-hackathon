@@ -7,34 +7,6 @@
 	<div>
 		<p>There are currently <strong>{{ reports_length }}</strong> open reports being worked on by our technicians. {% if is_open %}Now is a {% if reports_length < 10 %}<span class="label label-success">great</span>{% elif reports_length > 10 and reports_length < 20 %}<span class="label label-warning">good</span>{% else %}<span class="label label-important">decent</span>{% endif %} time to bring in your device for a speedy repair.{% endif %}</p>
 	</div>
-	{% if user.is_staff %}
-	<div>
-		{% if reports %}
-		<table class="table table-striped tablesorter">
-			<thead>
-				<tr>
-					<th>Problem</th>
-					<th>Owner</th>
-					<th>Created At</th>
-					<th>Updated At</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for report in reports %}
-				<tr>
-					<td><a href="/reports/{{report.id}}">{{ report.problem }}</a></td>
-					<td>{{ report.owner.first_name }} {{ report.owner.last_name }}</td>
-					<td>{{ report.createdAt }}</td>
-					<td>{{ report.updatedAt }}</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-		{% else %}
-		<p>No open reports. Pat yourself on the back</p>
-		{% endif %}
-	</div>
-	{% endif %}
 	<div class="row">
 		<div class="span4">
 			{% if is_open %}

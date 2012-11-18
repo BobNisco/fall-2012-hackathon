@@ -110,12 +110,17 @@ def view_report(request, reportID):
 def cpanel(request):
 	user = request.user
 	reports = Report.objects.all()
-	open = len(reports.filter(completed = False))
-	closed = len(reports.filter(completed = True))
+	open_reports = reports.filter(completed = False)
+	closed_reports = reports.filter(completed = True)
+	open = len(open_reports)
+	closed = len(closed_reports)
 	numReports = len(reports)
 	return render_to_response('cpanel/cpanel.html', {
+		'report' : reports,
 		'numReports' : numReports,
 		'user' : user,
+		'open_reports' : open_reports,
+		'closed_reports' : closed_reports,
 		'open' : open,
 		'closed' : closed,
 		'active' : 'index',
@@ -155,7 +160,7 @@ def search(request):
 	return render_to_response('search_results.html',{
 		'query_string': query_string,
 		'found_entries': found_entries
-	})
+	}, context_instance=RequestContext(request))
 
 def redirect_to_report(request):
 	return HttpResponseRedirect('reports/')

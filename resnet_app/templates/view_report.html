@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="page-header">
+	<h1>Current Report Status: {{latest.get_message_display}}</h1>
+</div>
 <div class="view_report" data-id="{{ report.id }}">
-	<h1>Report status : {{latest.get_message_display}}</h1>
     {% if report %}
     <div class="row">
-    	<div class="span10">
+    	<div class="span10 offset1">
     		<div class="progress progress-striped active">
     		{% if latest.message = "c" %}
 	  			<div class="bar bar-danger" style="width: 10%;"></div>

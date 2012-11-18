@@ -3,22 +3,62 @@
 {% block content %}
 	
 	<div class="page-header">
-		<div class="row">
-			<div class="span4">
-				<form action="/search/" class="form-search" method="post">
-					{% csrf_token %}
-					<input type="text" name="q" class="search-query">
-					<button type="submit" class="btn">Search</button>
-				</form>
-			</div>
-			<div class="btn pull-right"><a href="open">Open a New Report</a></div>
-		</div>
+		<div class="btn pull-right"><a href="open">Open a New Report</a></div>
+		<h1>Cpanel Home<h1>
 	</div>
 	
 	<div class="row">
-		<div class="span9">
+		<div class="span12">
 			<h2>{{open}} Open Reports</h2>
+			{% if open_reports %}
+			<table class="table table-striped tablesorter">
+				<thead>
+					<tr>
+						<th>Problem</th>
+						<th>Owner</th>
+						<th>Created At</th>
+						<th>Updated At</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for report in open_reports %}
+					<tr>
+						<td><a href="/reports/{{report.id}}">{{ report.problem }}</a></td>
+						<td>{{ report.owner.first_name }} {{ report.owner.last_name }}</td>
+						<td>{{ report.createdAt }}</td>
+						<td>{{ report.updatedAt }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% else %}
+			<p>No open reports. Pat yourself on the back</p>
+			{% endif %}
 			<h2>{{closed}} Closed Reports</h2>
+			{% if closed_reports %}
+			<table class="table table-striped tablesorter">
+				<thead>
+					<tr>
+						<th>Problem</th>
+						<th>Owner</th>
+						<th>Created At</th>
+						<th>Updated At</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for report in closed_reports %}
+					<tr>
+						<td><a href="/reports/{{report.id}}">{{ report.problem }}</a></td>
+						<td>{{ report.owner.first_name }} {{ report.owner.last_name }}</td>
+						<td>{{ report.createdAt }}</td>
+						<td>{{ report.updatedAt }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% else %}
+			<p>No closed reports. Get to work!</p>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}
