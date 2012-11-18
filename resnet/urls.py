@@ -1,3 +1,4 @@
+from resnet_app import views
 from django.conf.urls import patterns, include, url
 from django.contrib.auth.views import login, logout
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -20,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^cpanel/open', 'resnet_app.views.cpanel_open'),
     url(r'^accounts/login/$', login),
     url(r'^accounts/logout/$', logout),
+    url(r'^accounts/profile/$', views.redirect_to_report),
     url(r'^reports/$', 'resnet_app.views.profile'),
     url(r'^reports/(?P<reportID>[^\.]+)', 
                'resnet_app.views.view_report'),
