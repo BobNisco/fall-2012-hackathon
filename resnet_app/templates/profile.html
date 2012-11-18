@@ -3,7 +3,7 @@
 {% block content %}
     
     <div class="page-header">
-        <h1>Welcome <small>{{ user.first_name }} {{ user.last_name }}</small></h1>
+        <h1>Welcome <small>{% if user.first_name or user.last_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</small></h1>
     </div>
     {% if reports %}
     <table class="table table-striped tablesorter">
@@ -16,16 +16,14 @@
             </tr>
         </thead>
         <tbody>
-    {% for report in reports %}
+        {% for report in reports %}
             <tr>
                 <td><a href="{{report.id}}">{{ report.problem }}</a></td>
                 <td>{{ report.device.get_type_display }}</td>
                 <td>{{ report.createdAt }}</td>
-                {% for status in latest %}
-                <td>{%if status.report_id = report %}{{status.message}}{% endif %}</td>
-                {% endfor %}
+                <td>{% if report.completed %}Completed{% else %}<a href="{{report.id}}">Check Status</a>{% endif %}</td>
             </tr>
-    {% endfor %}
+        {% endfor %}
         </tbody>
     </table>
     {% else %}

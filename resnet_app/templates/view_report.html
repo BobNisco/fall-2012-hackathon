@@ -1,45 +1,68 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Report status : {{latest.message}}</h1>
+<h1>Report status : {{latest.get_message_display}}</h1>
     {% if report %}
     <div class="row">
-    	<div class="span9">
+    	<div class="span10">
     		<div class="progress progress-striped active">
-    		{% if latest.message = "Checked In" %}
+    		{% if latest.message = "c" %}
 	  			<div class="bar bar-danger" style="width: 10%;"></div>
-	  		{% elif latest.message = "In Progress" %}
+	  		{% elif latest.message = "i" %}
 	  			<div class="bar bar-warning" style="width: 50%;"></div>
-	  		{% elif latest.message = "Fixed" %}
+	  		{% elif latest.message = "f" %}
 	  			<div class="bar bar-info" style="width: 80%;"></div>
-	  		{% elif latest.message = "User Notified" %}
+	  		{% elif latest.message = "n" %}
 	  			<div class="bar bar-info" style="width: 90%;"></div>
-	  		{% elif latest.message = "User Picked Up" %}
+	  		{% elif latest.message = "p" %}
 	  			<div class="bar bar-success" style="width: 100%;"></div>
 	  		{% endif %}
 	  		</div>
 	  		<p>
 	  		Last updated {{latest.createdAt}}
-			</p>	
+			</p>
+			<legend>Report Overview</legend>
     		<table class="table table-striped">
 		        <tbody>
 		            <tr>
-		                <td>Device </td>
+		                <td><strong>Device</strong></td>
 		                <td>{{ report.device.get_type_display }}</td>
 		            </tr>
 		            <tr>
-		                <td>Date Opened</td>
+		                <td><strong>Date Opened</strong></td>
 		                <td>{{ report.createdAt }}</td>
 		            </tr>
 		            <tr>
-		                <td>Problem</td>
+		                <td><strong>Problem</strong></td>
 		                <td>{{ report.problem }}</td>
 		            </tr>
 		            <tr>
-		                <td>Problem Description</td>
+		                <td><strong>Description</strong></td>
 		                <td>{{ report.description }}</td>
 		            </tr>
 		        </tbody>
+		    </table>
+
+		    <legend>Status Updates</legend>
+		    <table class="table table-striped tablesorter">
+		    	<thead>
+		    		<tr>
+		    			<th>Message</th>
+		    			<th>Details</th>
+		    			<th>When</th>
+		    			<th>Tech</th>
+		    		</tr>
+		    	</thead>
+		    	<tbody>
+		    		{% for status in statuses %}
+		    		<tr>
+		    			<td>{{ status.get_message_display }}</td>
+		    			<td>{{ status.note }}</td>
+		    			<td>{{ status.createdAt }}</td>
+		    			<td>{{ status.tech.username }}</td>
+		    		</tr>
+		    		{% endfor %}
+		    	</tbody>
 		    </table>
     	</div>
     </div>

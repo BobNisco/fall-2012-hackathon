@@ -35,15 +35,20 @@ def logout_view(request):
 @login_required
 def profile(request):
 	user = request.user
-	reports = Report.objects.filter(owner=user)
-	latest = []
+	reports = Report.objects.filter(owner=user).order_by('-createdAt')
+	statuses = {}
 	for report in reports:
-		latest.append(Status.objects.filter(report_id=report).order_by('-createdAt')[0])
+		statuses[report.id] = Status.objects.filter(report=report).order_by('-createdAt')
+	latest_statuses = {}
+	for report in reports:
+		if statuses[report.id]:
+			latest_statuses[report.id] = statuses[report.id][0]
 	return render_to_response('profile.html', {
 		'user' : user,
 		'reports' : reports,
-		'active':'status',
-		'latest':latest
+		'active' : 'status',
+		'statuses' : statuses,
+		'latest_statuses' : latest_statuses,
 	})
 
 def office_status(request):
@@ -52,6 +57,9 @@ def office_status(request):
 	reports_length = len(reports)
 	now = datetime.datetime.now()
 	now_day = now.strftime("%A")
+	is_open = False
+	if (now.hour > 10 and now.hour < 19 and now_day != 'Friday') or (now.hour > 10 and now.hour < 17 and now_day == 'Friday'):
+		is_open = True
 	return render_to_response('office_status.html', {
 		'user' : user,
 		'reports' : reports,
@@ -59,18 +67,23 @@ def office_status(request):
 		'now' : now,
 		'now_day' : now_day,
 		'active':'office',
+		'open' : is_open,
 	})
 
 @login_required
 def view_report(request, reportID):
 	report = get_object_or_404(Report, id=reportID)	
 	user = request.user
-	latest = Status.objects.filter(report_id=reportID).order_by('-createdAt')[0]
+	statuses = Status.objects.filter(report_id=reportID).order_by('-createdAt')
+	latest = ''
+	if statuses:
+		latest = statuses[0]
 	if report:
 		if report.owner.id == user.id:
 			return render_to_response('view_report.html', {
 				'user' : user,
 				'report' : report,
+				'statuses' : statuses,
 				'latest' : latest,
 				'active' : 'status',
 			})
