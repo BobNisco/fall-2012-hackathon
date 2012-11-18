@@ -125,6 +125,7 @@ def cpanel(request, success = False):
 		'open' : open,
 		'closed' : closed,
 		'active' : 'index',
+		'success' : success,
 	}, context_instance=RequestContext(request))
 
 @staff_member_required
@@ -166,40 +167,40 @@ def cpanel_submit(request):
 			reportUser.username = username
 			u.save()
 			
-		# Get the devices the user has
-		usersDevices = Device.objects.filter(owner=reportUser)
-			
+	# Get the devices the user has
+	usersDevices = Device.objects.filter(owner=reportUser)
+		
+	deviceFound = False
+	for d in usersDevices:
+		# If the device exists recognize it, and use it
+		if d.os == os and d.type == type:
+			deviceObj = d
+			deviceFound = True
+						
+	if not deviceFound:
 		# Generate device object
 		deviceObj.owner = u
 		deviceObj.os = os
 		deviceObj.type = type
 		deviceObj.save()
 			
-		for d in usersDevices:
-			# If the device exists recognize it, and use it
-			if d.os == os and d.type == type:
-				deviceObj = d
+	# Generate Report
+	report.owner = u
+	report.device = deviceObj
+	report.description = description			
+	report.problem = problem
+	report.completed = False
+	report.save()
 			
+	# Generate initial status
+	status = Status()
+	status.report = report
+	# Checked in message
+	status.message = 'c'
+	status.tech = user
+	status.save()
 			
-		# Generate Report
-		report.owner = u
-		report.device = deviceObj
-		report.description = description			
-		report.problem = problem
-		report.completed = False
-		report.save()
-			
-		# Generate initial status
-		status = Status()
-		status.report = report
-		# Checked in message
-		status.message = 'c'
-		status.tech = user
-		status.save()
-			
-		return cpanel(request, True)
-	# Otherwise create a new one
-	return render_to_response('test.html', {'email' : email})
+	return cpanel(request, True)
 
 @login_required
 def find_device(request):
