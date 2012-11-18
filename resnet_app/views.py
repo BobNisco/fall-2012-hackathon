@@ -7,6 +7,7 @@ from django.utils import simplejson
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render_to_response, get_object_or_404
 
 def index(request):
@@ -42,7 +43,7 @@ def logout_view(request):
 	# Redirect to a success page.
 	return render_to_response("/reports/")
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def profile(request):
 	user = request.user
 	reports = Report.objects.filter(owner=user).order_by('-createdAt')
@@ -82,7 +83,7 @@ def office_status(request):
 		'open' : is_open,
 	})
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def view_report(request, reportID):
 	report = get_object_or_404(Report, id=reportID)	
 	user = request.user
@@ -100,9 +101,9 @@ def view_report(request, reportID):
 				'active' : 'status',
 			})
 	else:
-		return render_to_response('error.html') 
+		return redirect_to_report
 
-@login_required
+@staff_member_required
 def cpanel(request):
 	user = request.user
 	reports = Report.objects.all()
@@ -111,21 +112,25 @@ def cpanel(request):
 	numReports = len(reports)
 	return render_to_response('cpanel/cpanel.html', {'numReports' : numReports, 'user' : user, 'open' : open, 'closed' : closed})
 
-@login_required
+@staff_member_required
 def cpanel_open(request):
 	user = request.user
 	return render_to_response('cpanel/open.html', {'user' : user})
 
+@login_required
 def find_device(request):
 	if request.is_ajax():
 		id = request.POST['id']
 		device = Device.objects.get(id=id)
-		reports = Report.objects.filter(device=device)
-		if device:
-			return render_to_response('device_modal.html', {
-				'device' : device,
-				'reports' : reports,
-			})
+		if (device.owner.id == request.user.id) or (request.user.is_staff):
+			reports = Report.objects.filter(device=device)
+			if device:
+				return render_to_response('device_modal.html', {
+					'device' : device,
+					'reports' : reports,
+				})
+		else:
+			redirect_to_report
 	else:
 		return 'error'
 
