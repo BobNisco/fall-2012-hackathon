@@ -23,7 +23,7 @@
 				{% for report in reports %}
 				<tr>
 					<td><a href="/reports/{{report.id}}">{{ report.get_problem_display }}</a></td>
-					<td>{{ report.owner.first_name }} {{ report.owner.last_name }}</td>
+					<td>{{ report.owner.username}}</td>
 					<td>{{ report.createdAt }}</td>
 					<td>{{ report.updatedAt }}</td>
 				</tr>

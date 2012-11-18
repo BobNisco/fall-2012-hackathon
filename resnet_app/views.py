@@ -129,6 +129,9 @@ def cpanel_open(request):
 
 @login_required
 def cpanel_submit(request):
+	# The user adding the request
+	user = request.user
+	
 	name = request.POST['name']
 	phone = request.POST['phone']
 	email = request.POST['email']
@@ -139,33 +142,50 @@ def cpanel_submit(request):
 	deviceObj = Device()
 	report = Report()
 	usersWithSameEmail = User.objects.filter(email=email)
+	reportUser = User()
+	
 	for u in usersWithSameEmail:
 		# If user exists, don't create a new one
 		if u.email == email:
-			# Get the devices the user has
-			usersDevices = Device.objects.filter(owner=u)
+			reportUser = u
+		else:
+			reportUser.email = email
+			reportUser.username = username
+			u.save()
 			
-			for d in usersDevices:
-				# If the device exists recognize it
-				if d.os == os and d.type == type:
-					deviceObj = d
-				# Otherwise create a new device object
-				else: 
-					deviceObj.owner = u
-					deviceObj.os = os
-					deviceObj.type = type
-					deviceObj.save()
+		# Get the devices the user has
+		usersDevices = Device.objects.filter(owner=reportUser)
 			
-			# Generate Report
-			report.owner = u
-			report.device = deviceObj
-			report.description = description			
-			report.problem = problem
-			report.completed = False
-			report.save()
+		# Generate device object
+		deviceObj.owner = u
+		deviceObj.os = os
+		deviceObj.type = type
+		deviceObj.save()
 			
-			return render_to_response('test.html', {
-			})
+		for d in usersDevices:
+			# If the device exists recognize it, and use it
+			if d.os == os and d.type == type:
+				deviceObj = d
+			
+			
+		# Generate Report
+		report.owner = u
+		report.device = deviceObj
+		report.description = description			
+		report.problem = problem
+		report.completed = False
+		report.save()
+			
+		# Generate initial status
+		status = Status()
+		status.report = report
+		# Checked in message
+		status.message = 'c'
+		status.tech = user
+		status.save()
+			
+		return render_to_response('test.html', {'u' : u.username
+		})
 	# Otherwise create a new one
 	return render_to_response('test.html', {'email' : email})
 
