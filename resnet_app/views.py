@@ -1,6 +1,6 @@
 # Create your views here.
 import datetime
-from models import Device, Report, Report_Tech, Status, Notification
+from models import User,Device, Report, Report_Tech, Status, Notification
 from django.contrib import auth
 from django.conf import settings
 from django.utils import simplejson
@@ -108,12 +108,58 @@ def cpanel(request):
 	open = len(reports.filter(completed = False))
 	closed = len(reports.filter(completed = True))
 	numReports = len(reports)
-	return render_to_response('cpanel/cpanel.html', {'numReports' : numReports, 'user' : user, 'open' : open, 'closed' : closed})
+	return render_to_response('cpanel/cpanel.html', {
+			'numReports' : numReports, 
+			'user' : user, 
+			'open' : open, 
+			'closed' : closed})
 
 @login_required
 def cpanel_open(request):
 	user = request.user
-	return render_to_response('cpanel/open.html', {'user' : user})
+	device_choices = Device.get_device_choices(Device())
+	os_choices = Device.get_os_choices(Device())
+	problem_choices = Report.get_problem_choices(Report())
+	return render_to_response('cpanel/open.html', {
+			'user' : user, 
+			'device_choices' : device_choices, 
+			'os_choices' : os_choices, 
+			'problem_choices' : problem_choices
+			}, context_instance=RequestContext(request))
+
+@login_required
+def cpanel_submit(request):
+	name = request.POST['name']
+	phone = request.POST['phone']
+	email = request.POST['email']
+	type = request.POST['device']
+	os = request.POST['os']
+	problem = request.POST['problem']
+	description = request.POST['description']
+	deviceObj = Device()
+	report = Report()
+	usersWithSameEmail = User.objects.filter(email=email)
+	for u in usersWithSameEmail:
+		# If user exists, don't create a new one
+		if u.email == email:
+			deviceObj.owner = u
+			deviceObj.device = os
+			deviceObj.type = type
+			deviceObj.save()
+			
+			report.owner = u
+			report.device = deviceObj
+			report.description = description
+			report.problem = problem
+			report.completed = False
+			report.save()
+			
+			reports = Report.objects.all()
+			return render_to_response('test.html', {
+				'reports' : reports,
+			})
+	# Otherwise create a new one
+	return render_to_response('test.html', {'email' : email})
 
 def find_device(request):
 	if request.is_ajax():
