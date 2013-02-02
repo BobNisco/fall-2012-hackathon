@@ -5,3 +5,5 @@
 
 venv
 *.pyc
+
+resnet_db

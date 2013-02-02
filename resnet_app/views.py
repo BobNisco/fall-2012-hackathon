@@ -24,7 +24,7 @@ def index(request):
 		'reports_length' : reports_length,
 		'now' : now,
 		'now_day' : now_day,
-		'active':'index', 
+		'active':'index',
 	})
 
 def login_view(request):
@@ -87,7 +87,7 @@ def office_status(request):
 
 @login_required(login_url='/accounts/login/')
 def view_report(request, reportID):
-	report = get_object_or_404(Report, id=reportID)	
+	report = get_object_or_404(Report, id=reportID)
 	user = request.user
 	statuses = Status.objects.filter(report_id=reportID).order_by('-createdAt')
 	latest = ''
@@ -135,9 +135,9 @@ def cpanel_open(request):
 	os_choices = Device.get_os_choices(Device())
 	problem_choices = Report.get_problem_choices(Report())
 	return render_to_response('cpanel/open.html', {
-			'user' : user, 
-			'device_choices' : device_choices, 
-			'os_choices' : os_choices, 
+			'user' : user,
+			'device_choices' : device_choices,
+			'os_choices' : os_choices,
 			'problem_choices' : problem_choices
 			}, context_instance=RequestContext(request))
 
@@ -145,7 +145,7 @@ def cpanel_open(request):
 def cpanel_submit(request):
 	# The user adding the request
 	user = request.user
-	
+
 	name = request.POST['name']
 	phone = request.POST['phone']
 	email = request.POST['email']
@@ -164,38 +164,38 @@ def cpanel_submit(request):
 		if u.email == email:
 			reportUser = u
 			userFound = True
-			
+
 	if not userFound:
 		reportUser.email = email
 		reportUser.username = name
 		reportUser.password = 'password'
 		reportUser.save()
-			
+
 	# Get the devices the user has
 	usersDevices = Device.objects.filter(owner=reportUser)
-		
+
 	deviceFound = False
 	for d in usersDevices:
 		# If the device exists recognize it, and use it
 		if d.os == os and d.type == type:
 			deviceObj = d
 			deviceFound = True
-						
+
 	if not deviceFound:
 		# Generate device object
 		deviceObj.owner = reportUser
 		deviceObj.os = os
 		deviceObj.type = type
 		deviceObj.save()
-			
+
 	# Generate Report
 	report.owner = reportUser
 	report.device = deviceObj
-	report.description = description			
+	report.description = description
 	report.problem = problem
 	report.completed = False
 	report.save()
-			
+
 	# Generate initial status
 	status = Status()
 	status.report = report
@@ -203,7 +203,7 @@ def cpanel_submit(request):
 	status.message = 'c'
 	status.tech = user
 	status.save()
-			
+
 	return cpanel(request, True)
 
 @login_required
@@ -274,4 +274,4 @@ def save_status(request):
 
 
 def redirect_to_report(request):
-	return HttpResponseRedirect('reports/')
+	return HttpResponseRedirect('/reports/')
