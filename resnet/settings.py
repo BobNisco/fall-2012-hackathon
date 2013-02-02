@@ -1,5 +1,6 @@
 import os
 import socket
+import dj_database_url
 # Django settings for resnet project.
 
 DEBUG = True
@@ -22,6 +23,21 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
+if not os.environ.get('MYSITE_PRODUCTION', False):
+    DATABASES = {
+                'default': {
+                        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+                        'NAME': 'resnet_db',                        # Or path to database file if using sqlite3.
+                        'USER': '',                   # Not used with sqlite3.
+                        'PASSWORD': '',           # Not used with sqlite3.
+                        'HOST': '',              # Set to empty string for localhost. Not used with sqlite3.
+                        'PORT': '',                       # Set to empty string for default. Not used with sqlite3.
+                }
+        }
+
+if os.environ.get('MYSITE_PRODUCTION', False):
+    # Heroku Database
+    DATABASES['default'] =  dj_database_url.config()
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -134,19 +150,22 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
+            'require_debug_false': {
+                    '()': 'django.utils.log.RequireDebugFalse'
+            }
     },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+            'mail_admins': {
+                    'level': 'ERROR',
+                    'filters': ['require_debug_false'],
+                    'class': 'django.utils.log.AdminEmailHandler'
+            }
     },
+    'loggers': {
+            'django.request': {
+                    'handlers': ['mail_admins'],
+                    'level': 'ERROR',
+                    'propagate': True,
+            },
+    }
 }
-
-# Parse database configuration from $DATABASE_URL
-import dj_database_url
-DATABASES['default'] =  dj_database_url.config()
