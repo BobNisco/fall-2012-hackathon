@@ -15,3 +15,9 @@
 - A system for both students and ResNet employees to track CSRs/reports.
 - Front-end facing system for students to check to-the-second updates on the status of their report, check if ResNet is open and if it's a good time to show up for a speedy fix.
 - Back-end facing system for ResNet employees to manage all reports (open or closed), give status updates to the user, and search the backlog of all reports.
+
+## Try It Out
+======
+- Visit http://gentle-retreat-2531.herokuapp.com/ to try it out
+- Technician account: Username: technician1 Password: password
+- User account: Username: student1 Password: password
