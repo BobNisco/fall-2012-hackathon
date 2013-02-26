@@ -18,6 +18,6 @@
 
 ## Try It Out
 ======
-- Visit http://gentle-retreat-2531.herokuapp.com/ to try it out
+- Visit http://resnettracking.herokuapp.com/ to try it out
 - Technician account: Username: technician1 Password: password
 - User account: Username: student1 Password: password
